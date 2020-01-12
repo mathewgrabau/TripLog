@@ -10,7 +10,8 @@
         <ToolbarItem Text="New" Clicked="New_Clicked" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <CollectionView x:Name="trips" SelectionMode="Single" SelectionChanged="trips_SelectionChanged">
+        <CollectionView x:Name="trips" SelectionMode="Single" 
+                        ItemsSource="{Binding LogEntries}" SelectionChanged="trips_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10">
