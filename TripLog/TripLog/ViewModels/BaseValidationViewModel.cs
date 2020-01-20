@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+
+namespace TripLog.ViewModels
+{
+    public class BaseValidationViewModel : BaseViewModel, INotifyDataErrorInfo
+    {
+        readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
+
+        public BaseValidationViewModel()
+        {
+
+        }
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        public bool HasErrors => _errors?.Any(x => x.Value?.Any() == true) == true;
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+            {
+                return _errors.SelectMany(x => x.Value);
+            }
+
+            if (_errors.ContainsKey(propertyName) && _errors[propertyName].Any())
+            {
+                return _errors[propertyName];
+            }
+
+            return new List<string>();
+        }
+
+        /// <summary>
+        /// Method to validate View Model properties.
+        /// </summary>
+        /// <param name="rule">Performs validation on the property.</param>
+        /// <param name="error">Error to add to the list.</param>
+        /// <param name="propertyName">Name of the property to reduce.</param>
+        protected void Validate(Func<bool> rule, string error, [CallerMemberName] string propertyName = "")
+        {
+            if (string.IsNullOrWhiteSpace(propertyName))
+            {
+                return;
+            }
+
+            if (_errors.ContainsKey(propertyName))
+            {
+                _errors.Remove(propertyName);
+            }
+
+            if (rule() == false)
+            {
+                _errors.Add(propertyName, new List<string> { error });
+            }
+
+            OnPropertyChanged(nameof(HasErrors));
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+    }
+}

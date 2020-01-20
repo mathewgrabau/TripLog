@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace TripLog.ViewModels
 {
-    public class NewEntryViewModel : BaseViewModel
+    public class NewEntryViewModel : BaseValidationViewModel
     {
         string _title;
         double _latitude;
@@ -28,6 +28,7 @@ namespace TripLog.ViewModels
             set
             {
                 _title = value;
+                Validate(() => !string.IsNullOrWhiteSpace(_title), "Title must be provided.");
                 OnPropertyChanged();
                 SaveCommand.ChangeCanExecute();
             }
@@ -69,7 +70,9 @@ namespace TripLog.ViewModels
             set
             {
                 _rating = value;
+                Validate(() => _rating >= 1 && _rating <= 5, "Rating must be between 1 and 5.");
                 OnPropertyChanged();
+                SaveCommand.ChangeCanExecute();
             }
         }
 
@@ -100,6 +103,10 @@ namespace TripLog.ViewModels
             // TODO persist
         }
 
-        bool CanSave() => !string.IsNullOrWhiteSpace(Title);
+        /// <summary>
+        /// Cannot execute unless validation has passed successfully.
+        /// </summary>
+        /// <returns></returns>
+        bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
     }
 }
