@@ -16,11 +16,11 @@ namespace TripLog.Views
     {
         DetailViewModel ViewModel => BindingContext as DetailViewModel;
 
-        public DetailPage(TripLogEntry entry)
+        public DetailPage()
         {
             InitializeComponent();
 
-            BindingContext = new DetailViewModel(entry);
+            BindingContext = new DetailViewModel();
 
             if (entry != null)
             {

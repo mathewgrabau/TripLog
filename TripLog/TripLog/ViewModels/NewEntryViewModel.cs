@@ -108,5 +108,10 @@ namespace TripLog.ViewModels
         /// </summary>
         /// <returns></returns>
         bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;
+
+        public override void Init()
+        {
+
+        }
     }
 }

@@ -5,13 +5,12 @@ using TripLog.Models;
 
 namespace TripLog.ViewModels
 {
-    public class DetailViewModel : BaseViewModel
+    public class DetailViewModel : BaseViewModel<TripLogEntry>
     {
         TripLogEntry _entry;
 
-        public DetailViewModel(TripLogEntry entry)
+        public DetailViewModel()
         {
-            Entry = entry;
         }
 
         public TripLogEntry Entry
@@ -23,5 +22,11 @@ namespace TripLog.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public override void Init(TripLogEntry parameter)
+        {
+            Entry = parameter;
+        }
+
     }
 }
